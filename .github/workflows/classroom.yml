@@ -1,11 +1,19 @@
 name: GitHub Classroom Workflow
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_PASS: ${{ secrets.DOCKERHUB_PASS }}
+  KUBE_URL: ${{ secrets.KUBE_URL }}
+  KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+
 jobs:
   build:
     name: Autograding
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
         with:
@@ -14,12 +22,30 @@ jobs:
       - uses: docker/setup-buildx-action@v2
 
       # TODO build, publish to docker hub, deploy to k8s
+      - name: Build, publish to docker hub
+        run: |
+          echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          docker build --no-cache -t sergm/gateway ./src/gateway/ && docker push sergm/gateway:latest
+          docker build --no-cache -t sergm/rating ./src/rating/ && docker push sergm/rating:latest
+          docker build --no-cache -t sergm/library ./src/library/ && docker push sergm/library:latest
+          docker build --no-cache -t sergm/reservation ./src/reservation/ && docker push sergm/reservation:latest
+
+      - name: Deploy to k8s
+        run: |
+          kubectl config set-cluster rsoi --server="$KUBE_URL" --insecure-skip-tls-verify=true
+          kubectl config set-credentials admin-user --token="$KUBE_TOKEN"
+          kubectl config set-context default --cluster=rsoi --user=admin-user
+          kubectl config use-context default
+          cd k8s
+          helm delete postgres && helm install postgres postgres-chart/
+          helm delete services && helm install services services-chart/
+          sleep 65
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
-          collection: <variant>/postman/collection.json
-          environment: <variant>/postman/environment.json
+          collection: v4/postman/collection.json
+          environment: v4/postman/environment.json
           delayRequest: 100
           reporters: '[ "cli" ]'
 
