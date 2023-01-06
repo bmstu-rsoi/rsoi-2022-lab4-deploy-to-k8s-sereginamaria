@@ -23,7 +23,7 @@ jobs:
       # TODO build, publish to docker hub, deploy to k8s
       - name: Build, publish to docker hub
         run: |
-          echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+          echo "$DOCKERHUB_PASS" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
           docker build --no-cache -t sergm/gateway ./src/gateway/ && docker push sergm/gateway:latest
           docker build --no-cache -t sergm/rating ./src/rating/ && docker push sergm/rating:latest
           docker build --no-cache -t sergm/library ./src/library/ && docker push sergm/library:latest
