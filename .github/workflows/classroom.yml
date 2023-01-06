@@ -24,10 +24,10 @@ jobs:
       - name: Build, publish to docker hub
         run: |
           echo "$DOCKERHUB_PASS" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
-          docker build --no-cache -t sergm/gateway ./src/gateway/ && docker push sergm/gateway:latest
-          docker build --no-cache -t sergm/rating ./src/rating/ && docker push sergm/rating:latest
-          docker build --no-cache -t sergm/library ./src/library/ && docker push sergm/library:latest
-          docker build --no-cache -t sergm/reservation ./src/reservation/ && docker push sergm/reservation:latest
+          docker build --no-cache -t sereginamaria/gateway ./src/gateway/ && docker push sereginamaria/gateway:latest
+          docker build --no-cache -t sereginamaria/rating ./src/rating/ && docker push sereginamaria/rating:latest
+          docker build --no-cache -t sereginamaria/library ./src/library/ && docker push sereginamaria/library:latest
+          docker build --no-cache -t sereginamaria/reservation ./src/reservation/ && docker push sereginamaria/reservation:latest
 
       - name: Deploy to k8s
         run: |
