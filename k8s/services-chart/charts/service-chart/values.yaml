@@ -1,4 +1,4 @@
-domain: sergm.ru
+domain: sereginamaria.ru
 service:
   port: 8080
   isGateway:
