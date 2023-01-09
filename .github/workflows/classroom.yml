@@ -33,8 +33,8 @@ jobs:
       - name: Deploy to k8s
         run: |
           kubectl config set-cluster lrforbmstu --server="$KUBE_URL" --insecure-skip-tls-verify=true
-          kubectl config set-credentials admin-user --token="$KUBE_TOKEN"
-          kubectl config set-context default --cluster=rsoi --user=admin-user
+          kubectl config set-credentials ciuser --token="$KUBE_TOKEN"
+          kubectl config set-context default --cluster=lrforbmstu --user=ciuser
           kubectl config use-context default
           cd k8s
           helm delete postgres && helm install postgres postgres-chart/
