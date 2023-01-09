@@ -32,7 +32,7 @@ jobs:
 
       - name: Deploy to k8s
         run: |
-          kubectl config set-cluster rsoi --server="$KUBE_URL" --insecure-skip-tls-verify=true
+          kubectl config set-cluster lrforbmstu --server="$KUBE_URL" --insecure-skip-tls-verify=true
           kubectl config set-credentials admin-user --token="$KUBE_TOKEN"
           kubectl config set-context default --cluster=rsoi --user=admin-user
           kubectl config use-context default
