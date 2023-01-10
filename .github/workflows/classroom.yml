@@ -37,9 +37,11 @@ jobs:
           kubectl config set-context default --cluster=rsoi --user=admin-user
           kubectl config use-context default
           cd k8s
-          helm delete postgres || true
+          helm delete postgres --namespace default || true
+          sleep 1000
           helm install postgres postgres-chart
-          helm delete services || true
+          helm delete services --namespace default || true
+          sleep 1000
           helm install services services-chart
           sleep 65
 
