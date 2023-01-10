@@ -37,8 +37,10 @@ jobs:
           kubectl config set-context default --cluster=rsoi --user=admin-user
           kubectl config use-context default
           cd k8s
-          helm delete postgres && helm install postgres postgres-chart/
-          helm delete services && helm install services services-chart
+          helm delete postgres
+          helm install postgres postgres-chart
+          helm delete services
+          helm install services services-chart
           sleep 65
 
       - name: Run API Tests
