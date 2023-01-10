@@ -38,10 +38,10 @@ jobs:
           kubectl config use-context default
           cd k8s
           helm delete postgres --namespace default || true
-          sleep 65
+          sleep 30
           helm install postgres postgres-chart
           helm delete services --namespace default || true
-          sleep 65
+          sleep 30
           helm install services services-chart
           sleep 65
 
